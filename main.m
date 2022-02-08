@@ -1,7 +1,13 @@
 function main()
-% CUAVA-1
+%% CUAVA-1
 % 1 49275U 98067SU  22038.85422300  .00038560  00000-0  56171-3 0  9991
 % 2 49275  51.6401 254.1730 0005941 193.8362 257.3518 15.55314769 19376
+
+%% setup
+% Determine where your m-file's folder is.
+folder = pwd; 
+% Add that folder plus all subfolders to the path.
+addpath(genpath(folder));
 
 %% simulation
 re = 6378; % earth radius (km)
