@@ -4,27 +4,29 @@ function main()
 % 2 49275  51.6401 254.1730 0005941 193.8362 257.3518 15.55314769 19376
 
 %% setup
-% Determine where your m-file's folder is.
-folder = pwd; 
-% Add that folder plus all subfolders to the path.
-addpath(genpath(folder));
+% Add current folder and all subfolders to the path.
+addpath(genpath(pwd));
 
-%% simulation
+%% parameters
 re = 6378; % earth radius (km)
 g0 = 9.81; % gravitaional acceleration (m/s2)
 mu = 398600; % gravitational parameter (km3/s2)
 
+%% two line element set
 tle = [51.6401 254.1730 0005941 193.8362 257.3518 15.55314769];
+
+%% orbital element
 oe = tle2oe(tle);
 
+%% orbital element to ECI
 [ri,vi] = oe2rv(oe);
+T = period(oe);
 
-T = [0 period(oe)];
-
-% generate orbit
+%% generate orbit
 opts = odeset('RelTol',1e-10,'AbsTol',1e-10);
-[t,x] = ode45(@twobody,T,[ri,vi],opts);
+[t,x] = ode45(@twobody,[0 T],[ri,vi],opts);
 
+%% plot results
 plot3(x(:,1),x(:,2),x(:,3))
 grid on
 hold on
@@ -38,7 +40,6 @@ surf(6378*ex,6378*ey,6378*ez,'FaceColor','w')
 xlim([-10000 10000])
 ylim([-10000 10000])
 axis equal
-
 
 end
 
