@@ -4,8 +4,8 @@ function OE = tle2oe(TLE)
     O = TLE(2)/180*pi;
     e = TLE(3)/1e7;
     o = TLE(4)/180*pi;
-    % h = TLE(5);
-    % theta = TLE(6)/180*pi;
+    w = TLE(5)/180*pi;
+    theta = TLE(6)/180*pi;
 
     M = TLE(5)/180*pi;
     n = TLE(6)/60/60/24*2*pi; % rev/day -> rad/s
@@ -23,10 +23,21 @@ function OE = tle2oe(TLE)
     rp = a*(1-e);
     ra = (2*a - rp);
     
-    disp(['Period: ',num2str(T),' sec']);
-    disp(['Semimajor axis: ',num2str(a),' km']);
-    disp(['Perigee altitude: ',num2str(rp - 6378),' km']);
-    disp(['Apogee altitude: ',num2str(ra - 6378),' km']);    
+    disp(['Orbital elements'])
+    disp(['    Eccentricity: ',num2str(e)]);
+    disp(['    Semimajor axis: ',num2str(a), ' km']);
+    disp(['    Inclination: ', num2str(i*180/pi), 'deg']);
+    disp(['    Right Ascension of Ascending Node (RAAN): ',num2str(o*180/pi),' deg']);
+    disp(['    Argument of perigee: ',num2str(w*180/pi),' deg']);
+    disp(['    True anomaly: ',num2str(theta*180/pi),' deg']);  
+    fprintf('\n')
+    
+    disp(['Orbital parameters'])
+    disp(['    Period: ',num2str(T),' sec']);
+    disp(['    Semimajor axis: ',num2str(a),' km']);
+    disp(['    Eccentricity: ',num2str(e)]);
+    disp(['    Perigee altitude: ',num2str(rp - 6378),' km']);
+    disp(['    Apogee altitude: ',num2str(ra - 6378),' km']);    
 end
 
 
