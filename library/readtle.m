@@ -1,4 +1,4 @@
-function readtle(file, catalog)
+function [tle, epoch] = readtle(file, catalog)
 
 % READTLE Read satellite ephemeris data from a NORAD two-line element (TLE) file.
 %
@@ -20,7 +20,9 @@ function readtle(file, catalog)
   end
 
   fd = fopen(file,'r');
-  if fd < 0, fd = fopen([file '.tle'],'r'); end
+  if fd < 0
+      fd = fopen([file '.tle'],'r')
+  end
   assert(fd > 0,['Can''t open file ' file ' for reading.'])
 
   n = 0;
@@ -38,6 +40,7 @@ function readtle(file, catalog)
       assert(chksum(A2), 'Checksum failure on line 2')
       fprintf('Catalog Number: %d\n', satnum)
       fprintf('Epoch time: %s\n', A1(19:32)) % YYDDD.DDDDDDDD
+      epoch = A1(19:32);
       Incl = str2num(A2(9:16));
       fprintf('Inclination: %f deg\n', Incl)
       Omega = str2num(A2(18:25));
@@ -63,6 +66,7 @@ function readtle(file, catalog)
     A2 = fgetl(fd);
   end
 
+  tle = [Incl, Omega, ecc, w, M, n];
   fclose(fd);
 end
 

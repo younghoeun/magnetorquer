@@ -9,18 +9,18 @@ clear all;close all;clc
 addpath(genpath(pwd));
 
 %% fetch two line elements
-fid = fopen('cuava-1.txt','w');
-fscanf(fid,'%f %f %f %f %f %f %f')
-readtle('cuava-1.txt')
+% Inclination
+% Right ascension of ascending node
+% Eccentricity
+% Argument of perigee
+% Mean anomaly
+% Mean motion
+[tle, epoch] = readtle('cuava-1.txt');
 
-return
 %% parameters
 re = 6378; % earth radius (km)
 g0 = 9.81; % gravitaional acceleration (m/s2)
 mu = 398600; % gravitational parameter (km3/s2)
-
-%% two line element set
-tle = [51.6401 254.1730 0005941 193.8362 257.3518 15.55314769];
 
 %% orbital element
 oe = tle2oe(tle);
