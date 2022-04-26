@@ -1,45 +1,25 @@
 %% calculate magnetic dipole moment from experimental data
 clear all;close all;clc
 
-%% load raw data
+%% addpath
+addpath(genpath('data')); 
+addpath(genpath('src'));
+
+%% load and process raw data
 load('2021-11-24.mat')
-% find(raw(:,1) - raw(1,1) < 0)
-data = raw ;
-
-%% crop data
-start = find(sum(raw') == 14) ;  % find flag - first reading 
-if isempty(start)   
-    start = 1 ;
-end
-mtqon = find(sum(raw') == 1) ;   % find flag - magnetorquer on
-data([start:mtqon],:) = [] ;     % crop data
-
-%% system parameters
-I = 367623.6538/1e7;                            % kgm^2
-sigma = 16479.9504/1e7;                         % kgm^2      
-B = norm(mean(raw(1:mtqon - 10,8:9)/10))/1e6 ;  % Tesla [Wb/m^2]
-
-%% unit conversion
-[time,enc,acc,gyr,mag] = unitConv(data) ;
-tstep = diff(time) ;
+[data,mtqon,time,enc,acc,gyr,mag,tstep] = processData(raw) ;
 disp(['total duration: ',num2str(time(end)),' sec']) ;
 
-%% gyro bias compensation
-gyr = gyr - mean(raw(1:mtqon-10,2:4)/180*pi) ;
+%% system parameters
+I = 367623.6538/1e7;                            % moment of inertia, kgm^2
+sigma = 16479.9504/1e7;                         % 1-sigma, kgm^2      
+B = norm(mean(raw(1:mtqon - 10,8:9)/10))/1e6 ;  % ambient magnetic field, T or Wb/m^2
 
-%% filtered 
+%% smoothing
 filtered = smoothdata(gyr(:,3),'sgolay') ;
-% [pks, locs]= findpeaks(filtered) ;
-% time(locs)
 
 figure;hold on
 plot(time,filtered)
-% plot(time(locs),filtered(locs),'x')
-
-% %% curve fitting (need orientation)
-% tspan = [time(1) time(end)]
-% x0 = 
-% [ta,xa] = ode45(@(t,x) eom(t,x,M,B,I,2), tspan, x0);
 
 %% calculate frequency (FFT)
 % freq = calFreq(gyr(:,3),tstep) ;
