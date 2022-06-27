@@ -37,7 +37,8 @@ opts = odeset('RelTol',1e-10,'AbsTol',1e-10);
 [lon,lat,r]  = cart2sph(x(:,1), x(:,2), x(:,3));
 
 for i = 1:length(t)
-    [mag(:,i),H,D,I,F] = igrfmagm(r(i) - re,lat(i)*180/pi,lon(i)*180/pi,decyear(2015,7,4),12);
+%     [mag(:,i),H,D,I,F] = igrfmagm(r(i) - re,lat(i)*180/pi,lon(i)*180/pi,decyear(2015,7,4),12);
+    [mag(:,i),H,D,I,F] = wrldmagm(r(i) - re,lat(i)*180/pi,lon(i)*180/pi,decyear(2022,6,28),'2020');
 end
 
 %% plot results
@@ -58,14 +59,18 @@ xlabel('X (km)')
 ylabel('Y (km)')
 zlabel('Z (km)')
 
+% magnetic field
 figure
-plot(t,mag)
+plot(t,mag/1e9*1e6)
 xlabel('Time (sec)')
-ylabel('Earth magnetic field strength (nT)')
+ylabel('Earth magnetic field strength ($\mu$T)','Interpreter','latex')
+xlim([0 t(end)])
+ylim([-1e2 1e2])
+legend('x','y','z')
 
 a = findobj('Type', 'figure');
 for i = 1:length(a)
-    set(a(i).Children,'FontName','Times New Roman','FontSize',10)
+    set(a(i).Children,'FontName','Times New Roman','FontSize',12)
 end
 
 end
