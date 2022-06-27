@@ -38,7 +38,7 @@ opts = odeset('RelTol',1e-10,'AbsTol',1e-10);
 
 for i = 1:length(t)
 %     [mag(:,i),H,D,I,F] = igrfmagm(r(i) - re,lat(i)*180/pi,lon(i)*180/pi,decyear(2015,7,4),12);
-    [mag(:,i),H,D,I,F] = wrldmagm(r(i) - re,lat(i)*180/pi,lon(i)*180/pi,decyear(2022,6,28),'2020');
+    [mag(:,i),H,D,I,F(i)] = wrldmagm(r(i) - re,lat(i)*180/pi,lon(i)*180/pi,decyear(2022,6,28),'2020');
 end
 
 %% plot results
@@ -61,12 +61,17 @@ zlabel('Z (km)')
 
 % magnetic field
 figure
-plot(t,mag/1e9*1e6)
+plot(t,mag(1,:)/1e9*1e6,'LineStyle','-','LineWidth',2,'Color','k'); hold on
+plot(t,mag(2,:)/1e9*1e6,'LineStyle','--','LineWidth',2,'Color','k')
+plot(t,mag(3,:)/1e9*1e6,'LineStyle','-.','LineWidth',2,'Color','k')
 xlabel('Time (sec)')
 ylabel('Earth magnetic field strength ($\mu$T)','Interpreter','latex')
 xlim([0 t(end)])
 ylim([-1e2 1e2])
 legend('x','y','z')
+
+min(F)
+max(F)
 
 a = findobj('Type', 'figure');
 for i = 1:length(a)
